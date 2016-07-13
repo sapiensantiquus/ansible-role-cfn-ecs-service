@@ -1,0 +1,6 @@
+- src: https://github.com/mGageTechOps/ansible-role-cfn-elb
+  name: ansible-role-cfn-elb
+- src: https://github.com/mGageTechOps/ansible-role-cfn-ecs
+  name: ansible-role-cfn-ecs
+- src: https://github.com/mGageTechOps/ansible-role-cfn-ecs-task
+  name: ansible-role-cfn-ecs-task
