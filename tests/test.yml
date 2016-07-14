@@ -1,5 +1,60 @@
 ---
-- hosts: test
+- name: test without elb
+  hosts: test
   remote_user: root
+  vars:
+    region: "us-west-2"
+    ecs_service_stack_name: "test-ecs-service-stack"
+    ecs_service_container_name: "consul-bootstrap"
+    ecs_service_container_port: 8300
+    ecs_service_task: "{{ ecs_task_cf_output.stack_outputs.taskdef }}"
+    ecs_service_cluster_name: "{{ ecs_cluster_cf_output.stack_outputs.ecscluster }}"
+    ecs_asg_desired_capacity: 1
+    ecs_stack_name: "test-ecs-service-ecs-stack"
+    ecs_host_vpc: "YOUR-VPC-ID"
+    ecs_subnets: "YOUR-SUBNET-ID,YOUR-OTHER-SUBNET-ID"
+    ecs_sg_ids: "YOUR-SECURITYGROUP-ID"
+    ecs_host_keypair_name: "YOUR-KEYPAIR-NAME"
+    ecs_task_stack_name: "test-ecs-service-task-stack"
+    ecs_task_container_definitions:
+      - "{{ lookup('file', 'consul-bootstrap-definition.json') }}"
+    ecs_task_volume_definitions:
+      - "{{ lookup('file', 'consul-bootstrap-volume-definition.json') }}"
   roles:
+    - ansible-role-cfn-ecs
+    - ansible-role-cfn-ecs-task
+    - ansible-role-cfn-ecs-service
+
+- name: test with elb
+  hosts: test
+  remote_user: root
+  vars:
+    ecs_service_stack_name: "test-ecs-service-welb-stack"
+    ecs_service_container_name: "consul-bootstrap"
+    ecs_service_container_port: 8300
+    ecs_service_task: "{{ ecs_task_cf_output.stack_outputs.taskdef }}"
+    ecs_service_cluster_name: "{{ ecs_cluster_cf_output.stack_outputs.ecscluster }}"
+    ecs_service_elb_name: "{{ elb_cf_output.stack_outputs.LoadBalancerName }}"
+    elb_role_stack_name: "test-ecs-service-elb-stack"
+    ecs_host_vpc: "YOUR-VPC-ID"
+    ecs_subnets: "YOUR-SUBNET-ID,YOUR-OTHER-SUBNET-ID"
+    ecs_sg_ids: "YOUR-SECURITYGROUP-ID,{{ elb_cf_output.stack_outputs.TargetSecurityGroupId }}"
+    elb_vpc: "{{ ecs_host_vpc }}"
+    elb_subnets: "{{ ecs_subnets }}"
+    elb_listeners:
+      - port: 8300
+        instancePort: 8300
+        protocol: http
+    ecs_asg_desired_capacity: 1
+    ecs_stack_name: "test-ecs-service-ecs-stack"
+    ecs_host_keypair_name: "YOUR-KEYPAIR-NAME"
+    ecs_task_stack_name: "test-ecs-service-task-stack"
+    ecs_task_container_definitions:
+      - "{{ lookup('file', 'consul-bootstrap-definition.json') }}"
+    ecs_task_volume_definitions:
+      - "{{ lookup('file', 'consul-bootstrap-volume-definition.json') }}"
+  roles:
+    - ansible-role-cfn-elb
+    - ansible-role-cfn-ecs
+    - ansible-role-cfn-ecs-task
     - ansible-role-cfn-ecs-service

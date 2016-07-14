@@ -41,14 +41,12 @@ galaxy_info:
     #
     # NOTE: A tag is limited to a single word comprised of
     # alphanumeric characters. Maximum 20 tags per role.
-
 dependencies:
-  - src: https://github.com/mGageTechOps/ansible-role-cfn-elb
-    name: ansible-role-cfn-elb
-    when: ecs_elb_name is not defined and ecs_service_elb == true
-  - src: https://github.com/mGageTechOps/ansible-role-cfn-ecs
-    name: ansible-role-cfn-ecs
-    when: ecs_cluster_name is not defined
-  - src: https://github.com/mGageTechOps/ansible-role-cfn-ecs-task
-    name: ansible-role-cfn-ecs-task
-    when: ecs_task is not defined
+  - src: https://github.com/mGageTechOps/ansible-role-cfn-iam-role
+    name: ansible-role-cfn-iam-role
+    when: ecs_service_iam_role is not defined and 
+          ecs_service_elb_name is defined
+    iam_role_stack_name: "{{ ecs_service_iam_role_stack_name }}"
+    iam_role_tags: "{{ ecs_service_tags }}"
+    iam_role_policies: "{{ ecs_service_iam_role_policies }}" 
+    assume_role_policy_document: "{{ ecs_service_assume_role_policy_document }}"

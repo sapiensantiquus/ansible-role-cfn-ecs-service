@@ -1,0 +1,58 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Parameters" : {
+    "EcsTask": {
+      "Type": "String",
+      "Description": "ARN of an ecs task"
+    },
+    "ECSCluster": {
+      "Type": "String",
+      "Description": "name or arn of ecs cluster"
+    },
+    "ECSServiceRole": {
+      "Type": "String",
+      "Description": "name or arn of the iam role"
+    },
+    "ECSELBName": {
+      "Type": "String",
+      "Description": "name of the elb(immutable)"
+    },
+    "ContainerName": {
+      "Type": "String",
+      "Description": "name of the container(immutable)"
+    },
+    "ContainerPort": {
+      "Type": "Number",
+      "Description": "port of the container(immutable)"
+    },
+    "DesiredCount": {
+      "Type": "String",
+      "Description": "number of tasks"
+    }
+  },
+  "Resources": {
+    "service": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": { "Ref": "ECSCluster" },
+        "DesiredCount": { "Ref": "DesiredCount" },
+        {% if ecs_service_elb_name is defined %}
+        "LoadBalancers": [
+          {
+            "ContainerName": { "Ref": "ContainerName" },
+            "ContainerPort": { "Ref": "ContainerPort" },
+            "LoadBalancerName": { "Ref": "ECSELBName" }
+          }
+        ],
+        "Role": {"Ref":"ECSServiceRole"},
+        {% endif %}
+        "TaskDefinition": {"Ref": "EcsTask"}
+      }
+    }
+  },
+  "Outputs" : {
+    "ecsservice" : {
+      "Value" : { "Ref" : "service" }
+    }
+  }
+}

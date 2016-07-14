@@ -1,2 +1,38 @@
 ---
 # tasks file for ansible-role-cfn-ecs-service
+- name: Create build directory if not extant
+  file:
+    state: directory
+    dest: build
+
+- name: Template the ecs stack
+  template:
+    src: ecs_service.json.j2
+    dest: "build/ecs_service.{{ ecs_service_stack_name }}.json"
+
+- name: Create or remove cloudformation stack
+  cloudformation:
+    template_parameters:
+      EcsTask: "{{ ecs_service_task }}"
+      ECSCluster: "{{ ecs_service_cluster_name }}"
+      ECSServiceRole: "{% if ecs_service_iam_role is not defined and ecs_service_elb_name is defined %}{{ iam_role_cf_output.stack_outputs.RoleName }}{% else %}{{ ecs_service_iam_role|default(omit) }}{% endif %}"
+      ECSELBName: "{{ ecs_service_elb_name|default(omit) }}"
+      ContainerName: "{{ ecs_service_container_name|default(omit) }}"
+      ContainerPort: "{{ ecs_service_container_port|default(omit) }}"
+      DesiredCount: "1"
+    stack_name: "{{ ecs_service_stack_name }}"
+    region: "{{ region }}"
+    template: "build/ecs_service.{{ ecs_service_stack_name }}.json"
+    security_token: "{{ lookup('env','AWS_SESSION_TOKEN')|default(omit, true) }}"
+    tags: "{{ ecs_service_tags }}"
+    state: "{{ ecs_service_stack_state }}"
+  register: ecs_service_cf_output
+
+- name: cleanup the iam role 
+  cloudformation:
+    stack_name: "{{ ecs_service_iam_role_stack_name }}"
+    state: "absent"
+    region: "{{ region }}"
+  when: ecs_service_iam_role_cleanup and
+        ecs_service_stack_state == 'absent' and
+        ecs_service_iam_role is not defined
