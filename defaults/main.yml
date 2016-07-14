@@ -1,2 +1,26 @@
 ---
 # defaults file for ansible-role-cfn-ecs-service
+ecs_service_iam_role_stack_name: "{{ ecs_service_stack_name }}-iam-role"
+ecs_service_tags: {}
+ecs_service_stack_state: "present"
+ecs_service_iam_role_cleanup: true
+ecs_iam_role_stack_name: "{{ ecs_service_stack_name }}-iam-role"
+ecs_service_assume_role_policy_document:
+  "Version" : "2012-10-17"
+  "Statement":
+    - "Effect": "Allow"
+      "Principal": { "Service": [ "ecs.amazonaws.com" ] }
+      "Action": [ "sts:AssumeRole" ]
+ecs_service_iam_role_policies:
+  - name: ecs_service_policy
+    policy:
+      "Version": "2012-10-17"
+      "Statement":
+        - "Effect": "Allow"
+          "Action": 
+            - 'elasticloadbalancing:Describe*'
+            - 'elasticloadbalancing:DeregisterInstancesFromLoadBalancer'
+            - 'elasticloadbalancing:RegisterInstancesWithLoadBalancer'
+            - 'ec2:Describe*'
+            - 'ec2:AuthorizeSecurityGroupIngress'
+          "Resource": "*"
