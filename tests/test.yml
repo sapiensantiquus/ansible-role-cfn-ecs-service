@@ -6,7 +6,6 @@
     region: "us-west-2"
     ecs_service_stack_name: "test-ecs-service-stack"
     ecs_service_container_name: "consul-bootstrap"
-    ecs_service_container_port: 8300
     ecs_service_task: "{{ ecs_task_cf_output.stack_outputs.taskdef }}"
     ecs_service_cluster_name: "{{ ecs_cluster_cf_output.stack_outputs.ecscluster }}"
     ecs_asg_desired_capacity: 1
