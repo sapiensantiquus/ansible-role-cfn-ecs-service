@@ -33,7 +33,7 @@
     stack_name: "{{ ecs_service_iam_role_stack_name }}"
     state: "absent"
     region: "{{ region }}"
-    security_token: "{{ aws_security_token | default(omit, true) }}"
+    security_token: "{{ ansible_security_token | default(omit, true) }}"
   when: ecs_service_iam_role_cleanup and
         ecs_service_stack_state == 'absent' and
         ecs_service_iam_role is not defined
