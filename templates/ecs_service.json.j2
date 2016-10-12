@@ -44,8 +44,8 @@
         "DesiredCount": { "Ref": "DesiredCount" },
         {% if ecs_service_deployment_conf is defined %}
         "DeploymentConfiguration": {
-          "MaximumPercent" : { "Ref" : "DeploymentConfigurationMinHealthyPercent" },
-          "MinimumHealthyPercent" : { "Ref" : "DeploymentConfigurationMaxPercent" }
+          "MaximumPercent" : { "Ref" : "DeploymentConfigurationMaxPercent" },
+          "MinimumHealthyPercent" : { "Ref" : "DeploymentConfigurationMinHealthyPercent" }
         },
         {% endif %}
         {% if ecs_service_elb_name is defined %}
