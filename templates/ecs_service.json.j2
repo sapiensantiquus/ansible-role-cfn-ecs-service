@@ -28,6 +28,12 @@
     "DesiredCount": {
       "Type": "String",
       "Description": "number of tasks"
+    },
+    "DeploymentConfigurationMinHealthyPercent": {
+      "Type": "Number"
+    },
+    "DeploymentConfigurationMaxPercent": {
+      "Type": "Number"
     }
   },
   "Resources": {
@@ -36,6 +42,12 @@
       "Properties": {
         "Cluster": { "Ref": "ECSCluster" },
         "DesiredCount": { "Ref": "DesiredCount" },
+        {% if ecs_service_deployment_conf is defined %}
+        "DeploymentConfiguration": {
+          "MaximumPercent" : { "Ref" : "DeploymentConfigurationMinHealthyPercent" },
+          "MinimumHealthyPercent" : { "Ref" : "DeploymentConfigurationMaxPercent" }
+        },
+        {% endif %}
         {% if ecs_service_elb_name is defined %}
         "LoadBalancers": [
           {
