@@ -5,6 +5,8 @@ ecs_service_tags: {}
 ecs_service_stack_state: "present"
 ecs_service_iam_role_cleanup: true
 ecs_iam_role_stack_name: "{{ ecs_service_stack_name }}-iam-role"
+ecs_service_deploy_min_healthy_percent: "50"
+ecs_service_deploy_max_percent: "200"
 ecs_service_assume_role_policy_document:
   "Version" : "2012-10-17"
   "Statement":
