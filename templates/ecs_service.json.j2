@@ -42,7 +42,7 @@
       "Properties": {
         "Cluster": { "Ref": "ECSCluster" },
         "DesiredCount": { "Ref": "DesiredCount" },
-        {% if ecs_service_deploy_min_healthy_percent is defined and ecs_service_deploy_max_percent is defined %}
+        {% if ecs_service_use_deploy_conf is defined and ecs_service_use_deploy_conf == 'true' %}
         "DeploymentConfiguration": {
           "MaximumPercent" : { "Ref" : "DeploymentConfigurationMaxPercent" },
           "MinimumHealthyPercent" : { "Ref" : "DeploymentConfigurationMinHealthyPercent" }
