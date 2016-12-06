@@ -35,9 +35,9 @@
     ecs_service_stack_name: "test-ecs-service-stack"
     ecs_service_stack_state: "absent"
   roles:
-    - ansible-role-cfn-ecs
-    - ansible-role-cfn-ecs-task
     - ansible-role-cfn-ecs-service
+    - ansible-role-cfn-ecs-task
+    - ansible-role-cfn-ecs
 
 - name: test with elb
   hosts: test
@@ -86,7 +86,8 @@
     ecs_service_stack_name: "test-ecs-service-stack"
     ecs_service_stack_state: "absent"
   roles:
-    - ansible-role-cfn-elb
-    - ansible-role-cfn-ecs
-    - ansible-role-cfn-ecs-task
     - ansible-role-cfn-ecs-service
+    - ansible-role-cfn-ecs-task
+    - ansible-role-cfn-ecs
+    - ansible-role-cfn-elb
+
