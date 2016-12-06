@@ -28,6 +28,7 @@
   hosts: test
   remote_user: root
   vars:
+    region: "us-west-2"
     ecs_stack_name: "test-ecs-service-ecs-stack"
     ecs_cluster_stack_state: "absent"
     ecs_task_stack_name: "test-ecs-service-task-stack"
@@ -43,6 +44,7 @@
   hosts: test
   remote_user: root
   vars:
+    region: "us-west-2"
     ecs_service_stack_name: "test-ecs-service-welb-stack"
     ecs_service_container_name: "consul-bootstrap"
     ecs_service_container_port: 8300
@@ -77,6 +79,7 @@
   hosts: test
   remote_user: root
   vars:
+    region: "us-west-2"
     elb_role_stack_name: "test-ecs-service-elb-stack"
     elb_role_stack_state: "absent"
     ecs_stack_name: "test-ecs-service-ecs-stack"
