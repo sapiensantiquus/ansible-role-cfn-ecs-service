@@ -24,6 +24,21 @@
     - ansible-role-cfn-ecs-task
     - ansible-role-cfn-ecs-service
 
+- name: test without elb cleanup
+  hosts: test
+  remote_user: root
+  vars:
+    ecs_stack_name: "test-ecs-service-ecs-stack"
+    ecs_cluster_stack_state: "absent"
+    ecs_task_stack_name: "test-ecs-service-task-stack"
+    ecs_task_stack_state: "absent"
+    ecs_service_stack_name: "test-ecs-service-stack"
+    ecs_service_stack_state: "absent"
+  roles:
+    - ansible-role-cfn-ecs
+    - ansible-role-cfn-ecs-task
+    - ansible-role-cfn-ecs-service
+
 - name: test with elb
   hosts: test
   remote_user: root
@@ -52,6 +67,24 @@
       - "{{ lookup('file', 'consul-bootstrap-definition.json') }}"
     ecs_task_volume_definitions:
       - "{{ lookup('file', 'consul-bootstrap-volume-definition.json') }}"
+  roles:
+    - ansible-role-cfn-elb
+    - ansible-role-cfn-ecs
+    - ansible-role-cfn-ecs-task
+    - ansible-role-cfn-ecs-service
+
+- name: test with elb cleanup
+  hosts: test
+  remote_user: root
+  vars:
+    elb_role_stack_name: "test-ecs-service-elb-stack"
+    elb_role_stack_state: "absent"
+    ecs_stack_name: "test-ecs-service-ecs-stack"
+    ecs_cluster_stack_state: "absent"
+    ecs_task_stack_name: "test-ecs-service-task-stack"
+    ecs_task_stack_state: "absent"
+    ecs_service_stack_name: "test-ecs-service-stack"
+    ecs_service_stack_state: "absent"
   roles:
     - ansible-role-cfn-elb
     - ansible-role-cfn-ecs
