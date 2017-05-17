@@ -62,7 +62,7 @@
         {% for mapping in ecs_service_elb_container_mappings %}
           {
             "ContainerName": "{{ mapping.container_name }}",
-            "ContainerPort": "{{ mapping.cortainer_port }}",
+            "ContainerPort": "{{ mapping.container_port }}",
             "LoadBalancerName": "{{ mapping.elb_name }}"
           }
         {% if not loop.last %},{% endif %}
