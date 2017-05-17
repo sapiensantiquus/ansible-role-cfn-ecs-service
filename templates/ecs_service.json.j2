@@ -57,6 +57,18 @@
           }
         ],
         "Role": {"Ref":"ECSServiceRole"},
+        {% elif ecs_service_elb_container_mappings is defined %}
+        "LoadBalancers": [
+        {% for mapping in ecs_service_elb_container_mappings %}
+          {
+            "ContainerName": "{{ mapping.container_name }}",
+            "ContainerPort": "{{ mapping.cortainer_port }}",
+            "LoadBalancerName": "{{ mapping.elb_name }}"
+          }
+        {% if not loop.last %},{% endif %}
+        {% endfor %}
+        ],
+        "Role": {"Ref":"ECSServiceRole"},
         {% endif %}
         "TaskDefinition": {"Ref": "EcsTask"}
       }
