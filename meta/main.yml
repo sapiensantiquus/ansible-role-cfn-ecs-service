@@ -46,7 +46,7 @@ dependencies:
     version: 0.0.5
     name: ansible-role-cfn-iam-role
     when: ecs_service_iam_role is not defined and 
-          ecs_service_elb_name is defined
+          (ecs_service_elb_name is defined or ecs_service_elb_container_mappings is defined)
     iam_role_stack_name: "{{ ecs_service_iam_role_stack_name }}"
     iam_role_tags: "{{ ecs_service_tags }}"
     iam_role_policies: "{{ ecs_service_iam_role_policies }}" 
