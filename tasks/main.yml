@@ -15,7 +15,7 @@
     template_parameters:
       EcsTask: "{{ ecs_service_task }}"
       ECSCluster: "{{ ecs_service_cluster_name }}"
-      ECSServiceRole: "{% if ecs_service_iam_role is not defined and ecs_service_elb_name is defined %}{{ iam_role_cf_output.stack_outputs.RoleName }}{% else %}{{ ecs_service_iam_role|default('') }}{% endif %}"
+      ECSServiceRole: "{% if ecs_service_iam_role is not defined and (ecs_service_elb_name is defined or ecs_service_elb_container_mappings is defined) %}{{ iam_role_cf_output.stack_outputs.RoleName }}{% else %}{{ ecs_service_iam_role|default('') }}{% endif %}"
       ECSELBName: "{{ ecs_service_elb_name|default('') }}"
       ContainerName: "{{ ecs_service_container_name|default('') }}"
       ContainerPort: "{{ ecs_service_container_port|default(0) }}"
